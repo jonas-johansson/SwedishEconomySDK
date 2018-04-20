@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncomeTaxCalculatorProgram", "IncomeTaxCalculatorProgram\IncomeTaxCalculatorProgram.csproj", "{82A141B7-F2EA-4F49-9831-B023F49E93C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwedishEconomyTests", "SwedishEconomyTests\SwedishEconomyTests.csproj", "{57456540-87A1-418B-B23B-B43B01A59DF2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{82A141B7-F2EA-4F49-9831-B023F49E93C9} = {82A141B7-F2EA-4F49-9831-B023F49E93C9}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalaryRangeWriterProgram", "SalaryRangeWriterProgram\SalaryRangeWriterProgram.csproj", "{2B2C5A78-F581-409D-AF18-F1E39BB1E054}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SwedishEconomySDK", "SwedishEconomySDK\SwedishEconomySDK.shproj", "{7FBCF920-1136-4EB5-ADCF-922B432C289D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Programs", "Programs", "{53409B63-CF6B-4396-B710-D403C5B98A96}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SDK", "SDK", "{27A69172-64C1-4216-B972-5B36A0027C3E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D4928A3E-9919-422E-A734-29954108722D}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SwedishEconomySDK\SwedishEconomySDK.projitems*{2b2c5a78-f581-409d-af18-f1e39bb1e054}*SharedItemsImports = 4
+		SwedishEconomySDK\SwedishEconomySDK.projitems*{57456540-87a1-418b-b23b-b43b01a59df2}*SharedItemsImports = 4
+		SwedishEconomySDK\SwedishEconomySDK.projitems*{7fbcf920-1136-4eb5-adcf-922b432c289d}*SharedItemsImports = 13
+		SwedishEconomySDK\SwedishEconomySDK.projitems*{82a141b7-f2ea-4f49-9831-b023f49e93c9}*SharedItemsImports = 4
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82A141B7-F2EA-4F49-9831-B023F49E93C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82A141B7-F2EA-4F49-9831-B023F49E93C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82A141B7-F2EA-4F49-9831-B023F49E93C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82A141B7-F2EA-4F49-9831-B023F49E93C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57456540-87A1-418B-B23B-B43B01A59DF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57456540-87A1-418B-B23B-B43B01A59DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57456540-87A1-418B-B23B-B43B01A59DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57456540-87A1-418B-B23B-B43B01A59DF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B2C5A78-F581-409D-AF18-F1E39BB1E054}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B2C5A78-F581-409D-AF18-F1E39BB1E054}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B2C5A78-F581-409D-AF18-F1E39BB1E054}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B2C5A78-F581-409D-AF18-F1E39BB1E054}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{82A141B7-F2EA-4F49-9831-B023F49E93C9} = {53409B63-CF6B-4396-B710-D403C5B98A96}
+		{57456540-87A1-418B-B23B-B43B01A59DF2} = {D4928A3E-9919-422E-A734-29954108722D}
+		{2B2C5A78-F581-409D-AF18-F1E39BB1E054} = {53409B63-CF6B-4396-B710-D403C5B98A96}
+		{7FBCF920-1136-4EB5-ADCF-922B432C289D} = {27A69172-64C1-4216-B972-5B36A0027C3E}
+	EndGlobalSection
+EndGlobal
