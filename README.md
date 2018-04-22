@@ -6,7 +6,7 @@ The Swedish Economy SDK is a set of C# APIs and programs to help you with Swedis
 
 ## Motivation
 
-When I started a company in Sweden I was confronted with a lot of new concepts. I'm no genious but I thought I had a basic grasp of Swedish economy.
+When I started a company in Sweden I was confronted with a lot of new concepts. I'm no genius but I thought I had a basic grasp of Swedish economy.
 But one of the things that struck me was that all these tax concepts that I believed to be quite simple turned out to be littered with intricate details and conditions. It was complicated.
 
 There is no tax rate you can just slap onto your income and go home.
