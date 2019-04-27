@@ -6,7 +6,7 @@ namespace SalaryRangeWriterProgram
 {
 	class Program
 	{
-		static void Main(string[] args)
+		static void Main()
 		{
 			var output = new List<string>();
 

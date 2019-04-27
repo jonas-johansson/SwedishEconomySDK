@@ -5,7 +5,7 @@ namespace IncomeTaxCalculatorProgram
 {
 	public class Program
 	{
-		static void Main(string[] args)
+		static void Main()
 		{
 			// Fill in your data here:
 			var taxConfig = new IncomeTaxConfig()
