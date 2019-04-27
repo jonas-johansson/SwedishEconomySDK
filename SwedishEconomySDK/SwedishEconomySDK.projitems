@@ -12,5 +12,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)IncomeTaxCalculator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IncomeTaxConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IncomeTaxResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Round.cs" />
   </ItemGroup>
 </Project>

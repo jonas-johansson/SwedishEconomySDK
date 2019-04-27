@@ -33,6 +33,13 @@ namespace SwedishEconomySDK
 		public double gränsbeloppUtdelningFörenklingsregeln => 2.75 * IBB;
 		public double maxSjukpenninggrundandeInkomstFörSjukdom => 7.5 * PBB;
 
+		/// <summary>
+		/// Skattesats för kommunal inkomst.
+		/// </summary>
+		public double skattesats_kommlands { get { return skattesats_kommunalskatt + skattesats_landstingsskatt; } }
+
+		public int AgeAtTaxYearStart { get { return taxYear - birthYear; } }
+
 		public double SjukpenningGrundandeInkomst(double årsinkomst)
 		{
 			return årsinkomst * 0.97;
