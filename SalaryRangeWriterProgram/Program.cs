@@ -26,7 +26,7 @@ namespace SalaryRangeWriterProgram
 				övreSkiktgräns = 662300,
 
 				birthYear = 1980,
-			};
+			});
 
 			output.Add("Gross salary (year), Net salary (year), Total tax (year), Effective tax rate");
 

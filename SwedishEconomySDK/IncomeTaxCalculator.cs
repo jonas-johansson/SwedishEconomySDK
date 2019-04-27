@@ -2,62 +2,6 @@
 
 namespace SwedishEconomySDK
 {
-	public class IncomeTaxConfig
-	{
-		public double skattesats_kommunalskatt;
-		public double skattesats_landstingsskatt;
-		public double skattesats_begravning;
-		public int birthYear;
-		public int taxYear;
-
-		/// <summary>
-		/// Prisbasbelopp.
-		/// Reference: http://www.scb.se/sv_/Hitta-statistik/Statistik-efter-amne/Priser-och-konsumtion/Konsumentprisindex/Konsumentprisindex-KPI/33772/33779/Behallare-for-Press/406706/
-		/// </summary>
-		public double PBB;
-
-		/// <summary>
-		/// Inkomstbasbeloppet.
-		/// Reference: http://www.regeringen.se/artiklar/2015/08/prisbasbeloppet-faststallt/
-		/// </summary>
-		public double IBB;
-
-		// Could be calculated.
-		// Reference: https://www4.skatteverket.se/rattsligvagledning/27071.html?date=2017-01-01#section65-5
-		public double nedreSkiktgräns = 438900;
-		public double övreSkiktgräns = 638500;
-
-		public double maxPensionsgrundandeInkomst => 8.07 * IBB;
-		public double gränsbeloppUtdelningFörenklingsregeln => 2.75 * IBB;
-		public double maxSjukpenninggrundandeInkomstFörSjukdom => 7.5 * PBB;
-
-		public double SjukpenningGrundandeInkomst(double årsinkomst)
-		{
-			return årsinkomst * 0.97;
-		}
-
-		public double ErsättningFörSjukdom(double årsinkomst)
-		{
-			double cappedÅrsinkomst = Math.Min(årsinkomst, maxSjukpenninggrundandeInkomstFörSjukdom);
-			double ersättning = SjukpenningGrundandeInkomst(cappedÅrsinkomst) * 0.8;
-			return ersättning;
-		}
-	}
-
-	public struct IncomeTaxResult
-	{
-		public double kommunalskatt;
-		public double statligskatt;
-		public double begravningsavgift;
-		public double grundavdrag;
-		public double beskattningsbarForvärvsinkomst;
-		public double jobbskatteavdrag;
-		public double allmänPensionsavgift;
-		public double skattereduktionFörAllmänPensionsavgift;
-		public double slutligSkatt;
-		public double effektivTotalSkattesats;
-	}
-
 	public class IncomeTaxCalculator
 	{
 		// Reference: http://www.scb.se/sv_/Hitta-statistik/Statistik-efter-amne/Priser-och-konsumtion/Konsumentprisindex/Konsumentprisindex-KPI/33772/33779/Behallare-for-Press/406706/
@@ -94,15 +38,15 @@ namespace SwedishEconomySDK
 
 		public IncomeTaxCalculator(IncomeTaxConfig config)
 		{
-			this.skattesats_kommunalskatt = config.skattesats_kommunalskatt;
-			this.skattesats_landstingsskatt = config.skattesats_landstingsskatt;
-			this.skattesats_begravning = config.skattesats_begravning;
-			this.birthYear = config.birthYear;
-			this.taxYear = config.taxYear;
-			this.PBB = config.PBB;
-			this.IBB = config.IBB;
-			this.nedreSkiktgräns = config.nedreSkiktgräns;
-			this.övreSkiktgräns = config.övreSkiktgräns;
+			skattesats_kommunalskatt = config.skattesats_kommunalskatt;
+			skattesats_landstingsskatt = config.skattesats_landstingsskatt;
+			skattesats_begravning = config.skattesats_begravning;
+			birthYear = config.birthYear;
+			taxYear = config.taxYear;
+			PBB = config.PBB;
+			IBB = config.IBB;
+			nedreSkiktgräns = config.nedreSkiktgräns;
+			övreSkiktgräns = config.övreSkiktgräns;
 		}
 
 		public IncomeTaxResult Calculate(double arbetsinkomst)
@@ -111,18 +55,18 @@ namespace SwedishEconomySDK
 			double grundavdrag = Grundavdrag(fastställdFörvärvsinkomst);
 			double beskattningsbarFörvärvsinkomst = fastställdFörvärvsinkomst - grundavdrag;
 			double allmänPensionsavgift = AllmänPensionsavgift(fastställdFörvärvsinkomst);
-			double kommunalSkatt = KommunalSkatt(beskattningsbarFörvärvsinkomst);
+			double kommunalSkatt = CalculateKommunalSkatt(beskattningsbarFörvärvsinkomst);
 
 			var r = new IncomeTaxResult()
 			{
 				kommunalskatt = kommunalSkatt,
-				statligskatt = StatligSkatt(beskattningsbarFörvärvsinkomst),
-				begravningsavgift = Begravningsavgift(beskattningsbarFörvärvsinkomst),
+				statligskatt = CalculateStatligSkatt(beskattningsbarFörvärvsinkomst),
+				begravningsavgift = CalculateBegravningsavgift(beskattningsbarFörvärvsinkomst),
 				grundavdrag = grundavdrag,
 				beskattningsbarForvärvsinkomst = beskattningsbarFörvärvsinkomst,
 				allmänPensionsavgift = allmänPensionsavgift,
-				skattereduktionFörAllmänPensionsavgift = SkattereduktionFoerAllmaenPensionsavgift(fastställdFörvärvsinkomst),
-				jobbskatteavdrag = Jobbskatteavdrag(arbetsinkomst, grundavdrag, ageAtTaxYearStart, allmänPensionsavgift, kommunalSkatt),
+				skattereduktionFörAllmänPensionsavgift = CalculateSkattereduktionFörAllmänPensionsavgift(fastställdFörvärvsinkomst),
+				jobbskatteavdrag = CalculateJobbskatteavdrag(arbetsinkomst, grundavdrag, ageAtTaxYearStart, allmänPensionsavgift, kommunalSkatt),
 			};
 
 			r.slutligSkatt = r.kommunalskatt + r.statligskatt + r.begravningsavgift - r.jobbskatteavdrag + r.allmänPensionsavgift - r.skattereduktionFörAllmänPensionsavgift;
@@ -131,7 +75,7 @@ namespace SwedishEconomySDK
 			return r;
 		}
 
-		double SkattereduktionFoerAllmaenPensionsavgift(double fastställdFörvärvsinkomst)
+		double CalculateSkattereduktionFörAllmänPensionsavgift(double fastställdFörvärvsinkomst)
 		{
 			// In most cases the tax reduction for "allmän pensionsavgift" is exactly "allmän pensionsavgift".
 			// There are a few cases where the 
@@ -165,19 +109,19 @@ namespace SwedishEconomySDK
 			return avgift;
 		}
 
-		double Begravningsavgift(double beskattningsbarFörvärvsinkomst)
+		double CalculateBegravningsavgift(double beskattningsbarFörvärvsinkomst)
 		{
 			double avgift = Math.Floor(beskattningsbarFörvärvsinkomst * skattesats_begravning);
 			return avgift;
 		}
 
-		double KommunalSkatt(double beskattningsbarFörvärvsinkomst)
+		double CalculateKommunalSkatt(double beskattningsbarFörvärvsinkomst)
 		{
 			// Reference: https://www4.skatteverket.se/rattsligvagledning/2477.html?date=2017-01-01#section22-1;
 			return Math.Floor((skattesats_kommunalskatt + skattesats_landstingsskatt) * beskattningsbarFörvärvsinkomst);
 		}
 
-		double StatligSkatt(double beskattningsbarFörvärvsinkomst)
+		double CalculateStatligSkatt(double beskattningsbarFörvärvsinkomst)
 		{
 			// Reference: https://www4.skatteverket.se/rattsligvagledning/edition/2017.7/2930.html
 			// Reference: https://www4.skatteverket.se/rattsligvagledning/2477.html?date=2017-01-01#section22-1
@@ -188,11 +132,11 @@ namespace SwedishEconomySDK
 			double bfiÖverNedreSkiktgränsen = Math.Max(0, beskattningsbarFörvärvsinkomst - nedreSkiktgräns);
 			double bfiÖverÖvreSkiktgränsen = Math.Max(0, beskattningsbarFörvärvsinkomst - övreSkiktgräns);
 
-			double statligSkatt = Math.Round(skattesats_nedreGräns * bfiÖverNedreSkiktgränsen + skattesats_övreGräns * bfiÖverÖvreSkiktgränsen);
+			double statligSkatt = Math.Round((skattesats_nedreGräns * bfiÖverNedreSkiktgränsen) + (skattesats_övreGräns * bfiÖverÖvreSkiktgränsen));
 			return statligSkatt;
 		}
 
-		double Jobbskatteavdrag(double arbetsinkomst, double grundavdrag, int ageAtTaxYearStart, double allmänPensionsavgift, double kommunalskatt)
+		double CalculateJobbskatteavdrag(double arbetsinkomst, double grundavdrag, int ageAtTaxYearStart, double allmänPensionsavgift, double kommunalskatt)
 		{
 			double jobbskatteavdrag;
 
