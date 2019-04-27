@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncomeTaxCalculatorProgram", "IncomeTaxCalculatorProgram\IncomeTaxCalculatorProgram.csproj", "{82A141B7-F2EA-4F49-9831-B023F49E93C9}"
 EndProject
@@ -19,6 +19,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SDK", "SDK", "{27A69172-64C1-4216-B972-5B36A0027C3E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D4928A3E-9919-422E-A734-29954108722D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EditorConfig", "EditorConfig", "{DFFD02D3-88F1-4468-82EB-DB241527216A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -53,5 +58,8 @@ Global
 		{57456540-87A1-418B-B23B-B43B01A59DF2} = {D4928A3E-9919-422E-A734-29954108722D}
 		{2B2C5A78-F581-409D-AF18-F1E39BB1E054} = {53409B63-CF6B-4396-B710-D403C5B98A96}
 		{7FBCF920-1136-4EB5-ADCF-922B432C289D} = {27A69172-64C1-4216-B972-5B36A0027C3E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FDCAA017-45FF-4386-88C2-C03D919586FD}
 	EndGlobalSection
 EndGlobal
