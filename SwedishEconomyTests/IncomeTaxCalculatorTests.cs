@@ -1,9 +1,9 @@
-﻿using SwedishEconomySDK;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
+using SwedishEconomySDK;
 
 namespace SwedishEconomyTests
 {
-	[TestClass]
+	[TestFixture]
 	public class IncomeTaxCalculatorTests
 	{
 		// The expected values for the tests were calculated using Skatteverkets service https://www.skatteverket.se/webdav/files/servicetjanster/skatteutrakning2017/prelskut17ink1.html
@@ -27,7 +27,7 @@ namespace SwedishEconomyTests
 			return new IncomeTaxCalculator(Get2017TestConfig()).Calculate(arbetsinkomst);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Income_1_000()
 		{
 			var result = GetResultFor2017(1000);
@@ -42,7 +42,7 @@ namespace SwedishEconomyTests
 			Assert.AreEqual(0, result.slutligSkatt);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Income_10_000()
 		{
 			var result = GetResultFor2017(10000);
@@ -57,7 +57,7 @@ namespace SwedishEconomyTests
 			Assert.AreEqual(0, result.slutligSkatt);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Income_29_000()
 		{
 			var result = GetResultFor2017(29000);
@@ -72,7 +72,7 @@ namespace SwedishEconomyTests
 			Assert.AreEqual(2007, result.slutligSkatt);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Income_80_000()
 		{
 			var result = GetResultFor2017(80000);
@@ -87,7 +87,7 @@ namespace SwedishEconomyTests
 			Assert.AreEqual(7897, result.slutligSkatt);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Income_150_000()
 		{
 			var result = GetResultFor2017(150000);
@@ -102,7 +102,7 @@ namespace SwedishEconomyTests
 			Assert.AreEqual(23173, result.slutligSkatt);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Income_134_000()
 		{
 			var result = GetResultFor2017(134000);
@@ -117,7 +117,7 @@ namespace SwedishEconomyTests
 			Assert.AreEqual(18897, result.slutligSkatt);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Income_300_000()
 		{
 			var result = GetResultFor2017(300000);
@@ -132,7 +132,7 @@ namespace SwedishEconomyTests
 			Assert.AreEqual(63276, result.slutligSkatt);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Income_500_000()
 		{
 			var result = GetResultFor2017(500000);
@@ -147,7 +147,7 @@ namespace SwedishEconomyTests
 			Assert.AreEqual(130901, result.slutligSkatt);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Income_600_000()
 		{
 			var result = GetResultFor2017(600000);
@@ -162,7 +162,7 @@ namespace SwedishEconomyTests
 			Assert.AreEqual(180956, result.slutligSkatt);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Income_3_000_000()
 		{
 			var result = GetResultFor2017(3000000);
@@ -177,19 +177,19 @@ namespace SwedishEconomyTests
 			Assert.AreEqual(1524677, result.slutligSkatt);
 		}
 
-		[TestMethod]
+		[Test]
 		public void MaximaltUtnyttjande_PensionsgrundandeInkomst()
 		{
 			Assert.AreEqual(496305, Get2017TestConfig().maxPensionsgrundandeInkomst);
 		}
 
-		[TestMethod]
+		[Test]
 		public void MaximaltUtnyttjande_SjukpenningGrundandeInkomstFörSjukdom()
 		{
 			Assert.AreEqual(336000, Get2017TestConfig().maxSjukpenninggrundandeInkomstFörSjukdom);
 		}
 
-		[TestMethod]
+		[Test]
 		public void MaximaltUtnyttjande_GränsFörStatligSkatt()
 		{
 			var calc = new IncomeTaxCalculator(Get2017TestConfig());
