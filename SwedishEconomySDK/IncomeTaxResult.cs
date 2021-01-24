@@ -14,7 +14,9 @@ namespace SwedishEconomySDK
 		public double jobbskatteavdrag;
 		public double allmänPensionsavgift;
 		public double skattereduktionFörAllmänPensionsavgift;
+		public double skattereduktionFörFörvärvsinkomst;
 		public double slutligSkatt;
 		public double effektivTotalSkattesats;
+		public double publicServiceAvgift;
 	}
 }

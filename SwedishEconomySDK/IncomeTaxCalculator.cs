@@ -30,13 +30,47 @@ namespace SwedishEconomySDK
 				beskattningsbarForvärvsinkomst = beskattningsbarFörvärvsinkomst,
 				allmänPensionsavgift = allmänPensionsavgift,
 				skattereduktionFörAllmänPensionsavgift = CalculateSkattereduktionFörAllmänPensionsavgift(fastställdFörvärvsinkomst),
+				skattereduktionFörFörvärvsinkomst = CalculateSkattereduktionFörFörvärvsinkomst(beskattningsbarFörvärvsinkomst),
 				jobbskatteavdrag = CalculateJobbskatteavdrag(arbetsinkomst, grundavdrag, config.AgeAtTaxYearStart, allmänPensionsavgift, kommunalSkatt),
+				publicServiceAvgift = CalculatePublicServiceAvgift(beskattningsbarFörvärvsinkomst),
 			};
 
-			r.slutligSkatt = r.kommunalskatt + r.statligskatt + r.begravningsavgift - r.jobbskatteavdrag + r.allmänPensionsavgift - r.skattereduktionFörAllmänPensionsavgift;
+			r.slutligSkatt = r.kommunalskatt + r.statligskatt + r.begravningsavgift + r.publicServiceAvgift - r.jobbskatteavdrag + r.allmänPensionsavgift - r.skattereduktionFörAllmänPensionsavgift - r.skattereduktionFörFörvärvsinkomst;
 			r.effektivTotalSkattesats = r.slutligSkatt / arbetsinkomst;
 
 			return r;
+		}
+
+		double CalculatePublicServiceAvgift(double beskattningsbarFörvärvsinkomst)
+		{
+			// Reference: https://www.skatteverket.se/privat/skatter/arbeteochinkomst/skattetabeller/publicserviceavgift.4.22501d9e166a8cb399f31dd.html
+
+			if (config.taxYear >= 2021)
+			{
+				if (beskattningsbarFörvärvsinkomst < 132_990)
+				{
+					return beskattningsbarFörvärvsinkomst * 0.01;
+				}
+				else
+				{
+					return 1329;
+				}
+			}
+
+			return 0;
+		}
+
+		double CalculateSkattereduktionFörFörvärvsinkomst(double beskattningsbarFörvärvsinkomst)
+		{
+			if (config.taxYear >= 2021)
+			{
+				// Reference: https://www.skatteverket.se/privat/skatter/arbeteochinkomst/skattereduktioner.4.3810a01c150939e893f1a17e.html
+
+				double skattereduktion = 0.0075 * (Math.Min(240_000, beskattningsbarFörvärvsinkomst) - 40_000);
+				return skattereduktion;
+			}
+
+			return 0;
 		}
 
 		double CalculateSkattereduktionFörAllmänPensionsavgift(double fastställdFörvärvsinkomst)
@@ -95,7 +129,16 @@ namespace SwedishEconomySDK
 			double bfiÖverNedreSkiktgränsen = Math.Max(0, beskattningsbarFörvärvsinkomst - config.nedreSkiktgräns);
 			double bfiÖverÖvreSkiktgränsen = Math.Max(0, beskattningsbarFörvärvsinkomst - config.övreSkiktgräns);
 
-			double statligSkatt = Math.Round((skattesats_nedreGräns * bfiÖverNedreSkiktgränsen) + (skattesats_övreGräns * bfiÖverÖvreSkiktgränsen));
+			double statligSkatt;
+			if (config.taxYear >= 2020)
+			{
+				statligSkatt = Math.Round(skattesats_nedreGräns * bfiÖverNedreSkiktgränsen);
+			}
+			else
+			{
+				statligSkatt = Math.Round((skattesats_nedreGräns * bfiÖverNedreSkiktgränsen) + (skattesats_övreGräns * bfiÖverÖvreSkiktgränsen));
+			}
+
 			return statligSkatt;
 		}
 
@@ -110,20 +153,40 @@ namespace SwedishEconomySDK
 				var PBB = config.PBB;
 				var SKL = config.skattesats_kommlands;
 
-				// Reference: https://www4.skatteverket.se/rattsligvagledning/edition/2017.7/2940.html
+				if (config.taxYear >= 2020)
+				{
+					// Reference: https://www4.skatteverket.se/rattsligvagledning/edition/2020.15/2940.html
 
-				if (AI < 0.91 * PBB)
-					jobbskatteavdrag = (AI - GA) * SKL;
-				else if (AI >= 0.91 * PBB && AI < 2.94 * PBB)
-					jobbskatteavdrag = ((0.91 * PBB) + (0.332 * (AI - (0.91 * PBB))) - GA) * SKL;
-				else if (AI >= 2.94 * PBB && AI < 8.08 * PBB)
-					jobbskatteavdrag = ((1.584 * PBB) + (0.111 * (AI - (2.94 * PBB))) - GA) * SKL;
-				else if (AI >= 8.08 * PBB && AI <= 13.54 * PBB)
-					jobbskatteavdrag = ((2.155 * PBB) - GA) * SKL;
-				else if (AI >= 13.54 * PBB)
-					jobbskatteavdrag = (((2.155 * PBB) - GA) * SKL) - (0.03 * (AI - (13.54 * PBB)));
+					if (AI <= 0.91 * PBB)
+						jobbskatteavdrag = (AI - GA) * SKL;
+					else if (AI > 0.91 * PBB && AI <= 3.24 * PBB)
+						jobbskatteavdrag = ((0.91 * PBB) + (0.3405 * (AI - (0.91 * PBB))) - GA) * SKL;
+					else if (AI > 3.24 * PBB && AI <= 8.08 * PBB)
+						throw new NotImplementedException();
+					else if (AI > 8.08 * PBB && AI <= 13.54 * PBB)
+						jobbskatteavdrag = ((2.323 * PBB) - GA) * SKL;
+					else if (AI > 13.54 * PBB)
+						jobbskatteavdrag = (((2.323 * PBB) - GA) * SKL) - (0.03 * (AI - (13.54 * PBB)));
+					else
+						throw new Exception("Unhandled case for jobbskatteavdrag.");
+				}
 				else
-					throw new Exception("Unhandled case for jobbskatteavdrag");
+				{
+					// Reference: https://www4.skatteverket.se/rattsligvagledning/edition/2017.7/2940.html
+
+					if (AI < 0.91 * PBB)
+						jobbskatteavdrag = (AI - GA) * SKL;
+					else if (AI >= 0.91 * PBB && AI < 2.94 * PBB)
+						jobbskatteavdrag = ((0.91 * PBB) + (0.332 * (AI - (0.91 * PBB))) - GA) * SKL;
+					else if (AI >= 2.94 * PBB && AI < 8.08 * PBB)
+						jobbskatteavdrag = ((1.584 * PBB) + (0.111 * (AI - (2.94 * PBB))) - GA) * SKL;
+					else if (AI >= 8.08 * PBB && AI <= 13.54 * PBB)
+						jobbskatteavdrag = ((2.155 * PBB) - GA) * SKL;
+					else if (AI >= 13.54 * PBB)
+						jobbskatteavdrag = (((2.155 * PBB) - GA) * SKL) - (0.03 * (AI - (13.54 * PBB)));
+					else
+						throw new Exception("Unhandled case for jobbskatteavdrag");
+				}
 			}
 			else
 			{
