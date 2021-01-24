@@ -63,7 +63,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IncomeTaxCalculatorTests.cs" />
+    <Compile Include="IncomeTaxCalculator2021Tests.cs" />
+    <Compile Include="IncomeTaxCalculator2017Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

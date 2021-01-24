@@ -4,7 +4,7 @@ using SwedishEconomySDK;
 namespace SwedishEconomyTests
 {
 	[TestFixture]
-	public class IncomeTaxCalculatorTests
+	public class IncomeTaxCalculator2017Tests
 	{
 		// The expected values for the tests were calculated using Skatteverkets service https://www.skatteverket.se/webdav/files/servicetjanster/skatteutrakning2017/prelskut17ink1.html
 
